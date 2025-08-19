@@ -1,0 +1,41 @@
+# .gitignore for Slate
+
+# Build and binary outputs
+bin/
+obj/
+out/
+build/
+dist/
+*.dylib
+*.so
+*.dll
+*.exe
+*.pdb
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+
+# Logs and runtime artifacts
+*.log
+*.wal
+*.sst
+*.dat
+/data/
+/scratch/

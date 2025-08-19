@@ -1,0 +1,11 @@
+# Linguist language definitions and overrides
+*.prg linguist-language=X#
+*.xs linguist-language=X#
+*.xql linguist-language=SQL
+
+# Ensure consistent line endings
+* text=auto eol=lf
+*.sln text eol=crlf
+*.csproj text eol=crlf
+*.props text eol=crlf
+*.targets text eol=crlf
