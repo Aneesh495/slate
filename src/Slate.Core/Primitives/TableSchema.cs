@@ -63,4 +63,7 @@ public sealed class TableSchema
 
     public bool ContainsColumn(string name) =>
         _nameToOrdinal.ContainsKey(name);
+
+    public ColumnDescriptor? FindColumn(string name) =>
+        _nameToOrdinal.TryGetValue(name, out int ordinal) ? _columns[ordinal] : null;
 }
