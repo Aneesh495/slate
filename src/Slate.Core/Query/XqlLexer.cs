@@ -54,6 +54,7 @@ public enum TokenType
     Primary,
     Key,
     Explain,
+    With,
 
     // Operators
     Equal,              // =
@@ -141,7 +142,8 @@ public sealed class XqlLexer
         ["FALSE"] = TokenType.False,
         ["PRIMARY"] = TokenType.Primary,
         ["KEY"] = TokenType.Key,
-        ["EXPLAIN"] = TokenType.Explain
+        ["EXPLAIN"] = TokenType.Explain,
+        ["WITH"] = TokenType.With
     };
 
     private readonly string _source;
