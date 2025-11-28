@@ -172,7 +172,17 @@ public sealed class BPlusTree<TKey, TValue> where TKey : IComparable<TKey>
         return false;
     }
 
-    public List<(TKey Key, TValue Value)> RangeScan(TKey? startKey, TKey? endKey)
+    public List<(TKey Key, TValue Value)> RangeScan(TKey startKey, TKey endKey)
+    {
+        return RangeScanInternal(startKey, endKey, hasStart: true, hasEnd: true);
+    }
+
+    public List<(TKey Key, TValue Value)> RangeScanBounded(TKey? startKey, TKey? endKey, bool hasStart, bool hasEnd)
+    {
+        return RangeScanInternal(startKey ?? default!, endKey ?? default!, hasStart, hasEnd);
+    }
+
+    private List<(TKey Key, TValue Value)> RangeScanInternal(TKey startKey, TKey endKey, bool hasStart, bool hasEnd)
     {
         var results = new List<(TKey Key, TValue Value)>();
 
@@ -182,7 +192,7 @@ public sealed class BPlusTree<TKey, TValue> where TKey : IComparable<TKey>
         {
             var internalNode = (InternalNode)current;
             int childIdx = 0;
-            if (startKey is not null)
+            if (hasStart)
             {
                 int idx = internalNode.Keys.BinarySearch(startKey);
                 childIdx = idx >= 0 ? idx + 1 : ~idx;
@@ -196,9 +206,9 @@ public sealed class BPlusTree<TKey, TValue> where TKey : IComparable<TKey>
             for (int i = 0; i < leaf.Keys.Count; i++)
             {
                 var k = leaf.Keys[i];
-                if (startKey is not null && k.CompareTo(startKey) < 0)
+                if (hasStart && k.CompareTo(startKey) < 0)
                     continue;
-                if (endKey is not null && k.CompareTo(endKey) > 0)
+                if (hasEnd && k.CompareTo(endKey) > 0)
                     return results;
 
                 results.Add((k, leaf.Values[i]));
