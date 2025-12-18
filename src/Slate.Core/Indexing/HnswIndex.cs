@@ -44,6 +44,19 @@ public sealed class HnswIndex
     public int Count => _nodes.Count;
     public int Dimension => _dimension;
 
+    public float[]? GetVector(int id)
+    {
+        _lock.EnterReadLock();
+        try
+        {
+            return _nodes.TryGetValue(id, out var node) ? node.Vector : null;
+        }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
+    }
+
     public HnswIndex(int dimension, VectorMetric metric = VectorMetric.Cosine, int m = 16, int efConstruction = 64)
     {
         if (dimension <= 0) throw new ArgumentOutOfRangeException(nameof(dimension));
