@@ -58,6 +58,55 @@ public sealed class MemTable
         }
     }
 
+    public void Commit(SlateValue key, ulong txId, ulong commitTimestamp)
+    {
+        _rwLock.EnterWriteLock();
+        try
+        {
+            if (_entries.TryGetValue(key, out var list))
+            {
+                var current = list.First;
+                while (current != null)
+                {
+                    if (current.Value.TxId == txId && current.Value.CommitTimestamp == ulong.MaxValue)
+                    {
+                        current.Value = current.Value with { CommitTimestamp = commitTimestamp };
+                    }
+                    current = current.Next;
+                }
+            }
+        }
+        finally
+        {
+            _rwLock.ExitWriteLock();
+        }
+    }
+
+    public void Rollback(SlateValue key, ulong txId)
+    {
+        _rwLock.EnterWriteLock();
+        try
+        {
+            if (_entries.TryGetValue(key, out var list))
+            {
+                var current = list.First;
+                while (current != null)
+                {
+                    var next = current.Next;
+                    if (current.Value.TxId == txId && current.Value.CommitTimestamp == ulong.MaxValue)
+                    {
+                        list.Remove(current);
+                    }
+                    current = next;
+                }
+            }
+        }
+        finally
+        {
+            _rwLock.ExitWriteLock();
+        }
+    }
+
     public MemTableEntry? Get(SlateValue key, ulong readTimestamp)
     {
         _rwLock.EnterReadLock();
