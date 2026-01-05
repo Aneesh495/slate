@@ -90,6 +90,10 @@ public sealed class Repl
                 PrintHelp();
                 break;
 
+            case ".demo":
+                DemoScenario.Run(_database);
+                break;
+
             case ".tables":
                 var tables = _database.Catalog.ListTables();
                 if (tables.Count == 0)
