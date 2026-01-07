@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Slate.Engine\Slate.Engine.csproj" />
     <ProjectReference Include="..\..\src\Slate.Cli\Slate.Cli.csproj" />
+    <ProjectReference Include="..\..\src\Slate.Server\Slate.Server.csproj" />
   </ItemGroup>
 
 </Project>
