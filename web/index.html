@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slate HTAP Engine Console</title>
+  <link rel="stylesheet" href="css/slate.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo-badge">SLATE</span>
+      <h2>HTAP Database Console</h2>
+    </div>
+    <div class="header-status">
+      <span><span class="status-dot"></span>Connected: http://127.0.0.1:8080</span>
+      <span id="version-badge">v1.0.0</span>
+    </div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <div>
+        <h3>Catalog Tables</h3>
+        <ul id="table-list" class="table-list">
+          <li class="table-item">Loading tables...</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Quick Queries</h3>
+        <ul class="table-list">
+          <li class="table-item" onclick="setQuery('SELECT * FROM corpus LIMIT 10;')">Top 10 Corpus</li>
+          <li class="table-item" onclick="setQuery('SELECT domain, COUNT(*), AVG(views) FROM corpus GROUP BY domain;')">Domain Aggregates</li>
+          <li class="table-item" onclick="setQuery('SELECT id, title FROM corpus ORDER BY embedding <-> [0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0] LIMIT 5;')">Vector KNN Search</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="content-pane">
+      <section class="telemetry-bar">
+        <div class="stat-card">
+          <div class="stat-label">Active Transactions</div>
+          <div id="stat-tx" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Current Timestamp</div>
+          <div id="stat-ts" class="stat-value">1000</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Memory Footprint</div>
+          <div id="stat-mem" class="stat-value">0 MB</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Query Latency</div>
+          <div id="stat-lat" class="stat-value">0.00 ms</div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="editor-panel">
+          <textarea id="sql-input" spellcheck="false" placeholder="Enter XQL query (e.g. SELECT * FROM corpus;)">SELECT * FROM corpus LIMIT 5;</textarea>
+          <div class="editor-actions">
+            <span id="query-status" style="font-size: 12px; color: var(--text-secondary);">Ready</span>
+            <button id="btn-run" class="btn-run" onclick="runQuery()">Execute Query</button>
+          </div>
+        </div>
+
+        <div class="visuals-grid">
+          <div class="visual-box">
+            <div class="visual-title">Physical Execution Plan (DAG)</div>
+            <svg id="plan-svg" class="chart-canvas"></svg>
+          </div>
+          <div class="visual-box">
+            <div class="visual-title">Vector Cluster Projection (2D PCA)</div>
+            <svg id="vector-svg" class="chart-canvas"></svg>
+          </div>
+        </div>
+
+        <div class="results-panel">
+          <div class="results-header">
+            <span id="results-count">Results (0 rows)</span>
+            <span id="results-time">0.00 ms</span>
+          </div>
+          <div class="table-container">
+            <table id="results-table" class="data-table">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
